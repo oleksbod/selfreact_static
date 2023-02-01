@@ -5,10 +5,7 @@
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Web site created using create-react-app"
-    />
+
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <!--
       manifest.json provides metadata used when your web app is installed on a
@@ -24,20 +21,64 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>React App</title>
+    <title>Brand 360 Self Serve</title>
+
+
+
   </head>
-  <body>
+  <body >
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
+    <div id="canvasmain" style="position: absolute; top: 0; right: 0; bottom: 0; left: 0; z-index: 0;">
+      <canvas id="unity-canvas" width=99vw height=99vh style="width: 99vw; height: 99vh; background: #231F20;overflow-x: scroll; overflow-y:hidden;"></canvas>
+      <script src="Build/selfservestore.loader.js"></script>
+      <script>
+        Element.prototype.remove = function() {
+          this.parentElement.removeChild(this);
+        }
+        NodeList.prototype.remove = HTMLCollection.prototype.remove = function() {
+          for(var i = this.length - 1; i >= 0; i--) {
+            if(this[i] && this[i].parentElement) {
+              this[i].parentElement.removeChild(this[i]);
+            }
+          }
+        }
 
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
+        if(window.location.pathname.includes("admin") == false && window.location.pathname.includes("payment") == false&&window.location.pathname.includes("completion") == false ) {
 
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
+
+          if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+            // Mobile device style: fill the whole browser client area with the game canvas:
+            var meta = document.createElement('meta');
+            meta.name = 'viewport';
+            meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=yes, shrink-to-fit=yes';
+            document.getElementsByTagName('head')[0].appendChild(meta);
+          }
+
+          createUnityInstance(document.querySelector("#unity-canvas"), {
+              dataUrl: "Build/selfservestore.data",
+              frameworkUrl: "Build/selfservestore.framework.js",
+              codeUrl: "Build/selfservestore.wasm",
+              streamingAssetsUrl: "StreamingAssets",
+            companyName: "BrandLab360",
+            productName: "selfservestandard",
+            productVersion: "0.1",
+            // matchWebGLToCanvasSize: false, // Uncomment this to separately control WebGL canvas render size and DOM element size.
+            // devicePixelRatio: 1, // Uncomment this to override low DPI rendering on high DPI displays.
+          }).then((unityInstance) => {
+            let myGameInstance = unityInstance
+            window.unity = myGameInstance;
+          });
+        }
+        else
+        {
+          document.getElementById("canvasmain").remove();
+        }
+      </script>
+    </div>
+    <div id="root" style="position: absolute; top: 0; right: 0; bottom: 0; left: 0; width: 99vw; height: 99vh;">
+      </script>
+    </div>
+
+
   </body>
 </html>
